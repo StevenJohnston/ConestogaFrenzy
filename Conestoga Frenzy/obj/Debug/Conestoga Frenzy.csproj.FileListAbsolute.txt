@@ -46,3 +46,18 @@ G:\Conestoga Frenzy\Conestoga Frenzy\obj\Debug\Conestoga Frenzy.pdb
 \\Fssf01d\sf1\Home\SDjohnston\Conestoga Frenzy\Conestoga Frenzy\obj\Debug\Conestoga Frenzy.g.resources
 \\Fssf01d\sf1\Home\SDjohnston\Conestoga Frenzy\Conestoga Frenzy\obj\Debug\Conestoga_Frenzy.Properties.Resources.resources
 \\Fssf01d\sf1\Home\SDjohnston\Conestoga Frenzy\Conestoga Frenzy\obj\Debug\Conestoga Frenzy.csproj.GenerateResource.Cache
+C:\Users\Steven johnston\ConestogaFrenzy\Conestoga Frenzy\bin\Debug\Conestoga Frenzy.exe.config
+C:\Users\Steven johnston\ConestogaFrenzy\Conestoga Frenzy\obj\Debug\Conestoga Frenzy.exe
+C:\Users\Steven johnston\ConestogaFrenzy\Conestoga Frenzy\obj\Debug\Conestoga Frenzy.pdb
+C:\Users\Steven johnston\ConestogaFrenzy\Conestoga Frenzy\bin\Debug\Conestoga Frenzy.exe
+C:\Users\Steven johnston\ConestogaFrenzy\Conestoga Frenzy\bin\Debug\Conestoga Frenzy.pdb
+C:\Users\Steven johnston\ConestogaFrenzy\Conestoga Frenzy\obj\Debug\Conestoga Frenzy.csprojResolveAssemblyReference.cache
+C:\Users\Steven johnston\ConestogaFrenzy\Conestoga Frenzy\obj\Debug\MainWindow.g.cs
+C:\Users\Steven johnston\ConestogaFrenzy\Conestoga Frenzy\obj\Debug\App.g.cs
+C:\Users\Steven johnston\ConestogaFrenzy\Conestoga Frenzy\obj\Debug\GeneratedInternalTypeHelper.g.cs
+C:\Users\Steven johnston\ConestogaFrenzy\Conestoga Frenzy\obj\Debug\Conestoga Frenzy_MarkupCompile.cache
+C:\Users\Steven johnston\ConestogaFrenzy\Conestoga Frenzy\obj\Debug\Conestoga Frenzy_MarkupCompile.lref
+C:\Users\Steven johnston\ConestogaFrenzy\Conestoga Frenzy\obj\Debug\MainWindow.baml
+C:\Users\Steven johnston\ConestogaFrenzy\Conestoga Frenzy\obj\Debug\Conestoga Frenzy.g.resources
+C:\Users\Steven johnston\ConestogaFrenzy\Conestoga Frenzy\obj\Debug\Conestoga_Frenzy.Properties.Resources.resources
+C:\Users\Steven johnston\ConestogaFrenzy\Conestoga Frenzy\obj\Debug\Conestoga Frenzy.csproj.GenerateResource.Cache

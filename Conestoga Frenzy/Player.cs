@@ -14,13 +14,18 @@ namespace Conestoga_Frenzy
 {
     public class Player
     {
-        const int SPRITE_SPEED = 12;
         int SpriteCounter = 0;
-        const double MAX_SPEED = 1;
-        const double MAX_SPEED_CHANGE = 0.1;
-        const double MAX_SPEED_ON_X = 1000000;
+        const int SPRITE_SPEED = 12;
+
+        const double MAX_SPEED = 0.8;
+        const double MAX_SPEED_CHANGE = 0.10;
+        const double MAX_SPEED_ON_X = 2;
         const double SPEED_DIVISOR = 10;
+        const double WEIGHT = 2;
+        const double SPEED_POWER = 9;
+        
         const double SIZE_RATIO = 2;
+
         public long id;
         public Color colour;
         public Point position;
@@ -28,6 +33,7 @@ namespace Conestoga_Frenzy
         public Point velocity;
         public Point acceleration;
         public Point speedOnX;
+        public int score =0;
 
         int canvasItemIndex = -1;
         Image thisElement;
@@ -117,8 +123,8 @@ namespace Conestoga_Frenzy
                     speedOnX.Y = MAX_SPEED * -1;
                 }
 
-                velocity.X += Math.Pow(speedOnX.X, 5) / SPEED_DIVISOR;
-                velocity.Y += Math.Pow(speedOnX.Y, 5) / SPEED_DIVISOR;
+                velocity.X += Math.Pow(speedOnX.X, SPEED_POWER) / SPEED_DIVISOR;
+                velocity.Y += Math.Pow(speedOnX.Y, SPEED_POWER) / SPEED_DIVISOR;
 
                 int polarity = 0;
                 polarity = velocity.X > 0 ? 1 : -1;
@@ -137,8 +143,8 @@ namespace Conestoga_Frenzy
                 {
                     if (collides(player))
                     {
-                        afterCollisionVelocity.X += (player.velocity.X * Math.Abs(player.acceleration.X / 2))- (plusOrMinus(afterCollisionVelocity.X) * 1.5);
-                        afterCollisionVelocity.Y += (player.velocity.Y * Math.Abs(player.acceleration.Y / 2)) - (plusOrMinus(afterCollisionVelocity.Y) * 1.5);
+                        afterCollisionVelocity.X += (player.velocity.X * Math.Abs(player.acceleration.X / 2))- (plusOrMinus(afterCollisionVelocity.X) * WEIGHT);
+                        afterCollisionVelocity.Y += (player.velocity.Y * Math.Abs(player.acceleration.Y / 2)) - (plusOrMinus(afterCollisionVelocity.Y) * WEIGHT);
                     }
                 }
             }
@@ -161,27 +167,30 @@ namespace Conestoga_Frenzy
         }
         public bool collides(Player player)
         {
-            bool doseCollide = false;
+            bool doesCollide = false;
             double maxDistance = size.X / 2 + player.size.X / 2;
             if (Hypotenuse(position.X-player.position.X,position.Y-player.position.Y) <= maxDistance)
             {
-                doseCollide = true;
+                doesCollide = true;
             }
-            return doseCollide;
+            return doesCollide;
         }
         
         public void OnPlat(MyCanvas myCanvas, Stage stage)
         {
-            Point centerOfScreen = new Point(myCanvas.ActualWidth/2,myCanvas.ActualHeight/2);
-            double DistanceFromCenter = Hypotenuse(centerOfScreen.X - position.X, centerOfScreen.Y - position.Y);
-            
-            if (DistanceFromCenter > stage.maxFromCenter+size.X/4)
+            if (isAlive)
             {
-                isAlive = false;
-                velocity = new Point(0, 0);
-                acceleration = new Point(0,0);
-                speedOnX = new Point(0,0);
-                //Console.WriteLine("Die");
+                Point centerOfScreen = new Point(myCanvas.ActualWidth / 2, myCanvas.ActualHeight / 2);
+                double DistanceFromCenter = Hypotenuse(centerOfScreen.X - position.X, centerOfScreen.Y - position.Y);
+
+                if (DistanceFromCenter > stage.maxFromCenter + size.X / 4)
+                {
+                    isAlive = false;
+                    velocity = new Point(0, 0);
+                    acceleration = new Point(0, 0);
+                    speedOnX = new Point(0, 0);
+                    //Console.WriteLine("Die");
+                }
             }
         }
 
@@ -232,7 +241,7 @@ namespace Conestoga_Frenzy
             {
                 if (canvasItemIndex != -1)
                 {
-                    myCanvas.Children.RemoveAt(canvasItemIndex);
+                    myCanvas.Children.Remove(thisElement);
                     canvasItemIndex = -1;
                 }
             }

@@ -13,11 +13,10 @@ namespace Conestoga_Frenzy
     {
         const int STAGE_LENGTH = 20 * 120;//20 seconds
         int stageTime = 0;
-        const double SIZE_RATIO = 1;
+        const double SIZE_RATIO = 0.9;
         public double maxSize = 0;
-        public double SPAWN_DISTANCE_RATIO = 0.75;
+        public double SPAWN_DISTANCE_RATIO = 0.75;//0.75
         public double maxFromCenter = 0;
-        Point size;
         public int state =3;
         BitmapImage[] stageImages = new BitmapImage[4];
         public double[] maxSizes = new double[4];
@@ -34,9 +33,9 @@ namespace Conestoga_Frenzy
             img = new System.Drawing.Bitmap((System.Drawing.Image)img, new System.Drawing.Size((int)(img.Width * SIZE_RATIO), (int)(img.Height * SIZE_RATIO)));
             stageImages[3] = ExtBitmap.ToBitmapImage(img);
             maxSize = img.Width * SIZE_RATIO;
-            maxFromCenter = img.Width / 2;
+            maxFromCenter = img.Width * SIZE_RATIO / 2;
             maxSizes[3] = img.Width * SIZE_RATIO;
-            maxFromCenters[3] = img.Width / 2;
+            maxFromCenters[3] = img.Width * SIZE_RATIO / 2;
 
             elements[3] = new Image();
             elements[3].Source = stageImages[3];
@@ -44,13 +43,13 @@ namespace Conestoga_Frenzy
             elements[3].Height = img.Height * SIZE_RATIO;
 
             //maxSize = img.Width * SIZE_RATIO;
-            maxFromCenter = img.Width/2;
+            maxFromCenter = img.Width * SIZE_RATIO / 2;
 
             img = Properties.Resources.Outring;
             img = new System.Drawing.Bitmap((System.Drawing.Image)img, new System.Drawing.Size((int)(img.Width * SIZE_RATIO), (int)(img.Height * SIZE_RATIO)));
             stageImages[2] = ExtBitmap.ToBitmapImage(img);
             maxSizes[2] = img.Width * SIZE_RATIO;
-            maxFromCenters[2] = img.Width / 2;
+            maxFromCenters[2] = img.Width * SIZE_RATIO / 2;
             elements[2] = new Image();
             elements[2].Source = stageImages[2];
             elements[2].Width = img.Width * SIZE_RATIO;
@@ -60,7 +59,7 @@ namespace Conestoga_Frenzy
             img = new System.Drawing.Bitmap((System.Drawing.Image)img, new System.Drawing.Size((int)(img.Width * SIZE_RATIO), (int)(img.Height * SIZE_RATIO)));
             stageImages[1] = ExtBitmap.ToBitmapImage(img);
             maxSizes[1] = img.Width * SIZE_RATIO;
-            maxFromCenters[1] = img.Width / 2;
+            maxFromCenters[1] = img.Width * SIZE_RATIO / 2;
             elements[1] = new Image();
             elements[1].Source = stageImages[1];
             elements[1].Width = img.Width * SIZE_RATIO;
@@ -70,7 +69,7 @@ namespace Conestoga_Frenzy
             img = new System.Drawing.Bitmap((System.Drawing.Image)img, new System.Drawing.Size((int)(img.Width * SIZE_RATIO), (int)(img.Height * SIZE_RATIO)));
             stageImages[0] = ExtBitmap.ToBitmapImage(img);
             maxSizes[0] = img.Width * SIZE_RATIO;
-            maxFromCenters[0] = img.Width / 2;
+            maxFromCenters[0] = img.Width * SIZE_RATIO / 2;
             elements[0] = new Image();
             elements[0].Source = stageImages[0];
             elements[0].Width = img.Width * SIZE_RATIO;
@@ -88,6 +87,7 @@ namespace Conestoga_Frenzy
             maxSize = maxSizes[state];
             maxFromCenter = maxFromCenters[state];
             FlashTimer = 0;
+            stageTime = 0;
             visable = new bool[4] { true, true, true, true };
         }
 
@@ -126,7 +126,7 @@ namespace Conestoga_Frenzy
                     state--;
                 }
                 maxSize = maxSizes[state];
-                maxFromCenter = maxSizes[state] / 2;
+                maxFromCenter = maxFromCenters[state];
                 stageTime = 0;
             }
             else if (stageTime > STAGE_LENGTH - (120 * 5))

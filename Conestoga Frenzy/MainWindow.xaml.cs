@@ -28,8 +28,9 @@ namespace Conestoga_Frenzy
         public MainWindow()
         {
             InitializeComponent();
+            Canvas.SetRight(spHighScore,game.ActualWidth);
             lblIP.Content = GetLocalIPAddress();
-            Game theGame = new Game(game);
+            Game theGame = new Game(this);
             Thread gameThread = new Thread(theGame.start);
             gameThread.SetApartmentState(ApartmentState.STA);
             gameThread.Start();    

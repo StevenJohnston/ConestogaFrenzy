@@ -5,27 +5,29 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Conestoga_Frenzy"
         mc:Ignorable="d"
-        Title="MainWindow"  WindowState="Maximized" WindowStyle="None">
-    <local:MyCanvas Background="Gray" Height="1024px" x:Name="game">
+        Title="MainWindow" Background="#EEEEEE" WindowState="Maximized" WindowStyle="None">
+    <local:MyCanvas Background="Gray" x:Name="game">
         <StackPanel>
-            <TextBlock FontSize="26" Margin="10" Foreground="Red">
+                <TextBlock FontSize="26" Margin="10" Foreground="Red">
                         How To Play:
-            </TextBlock>
-            <TextBlock FontSize="16" Margin="1" TextTrimming="CharacterEllipsis" Foreground="Green" Height="88">
+                </TextBlock>
+                <TextBlock FontSize="16" Margin="1" TextTrimming="CharacterEllipsis" Foreground="Green" Height="88">
                 1. Own an android device<LineBreak />
                 2. Download the app<LineBreak />
                 3. Launch app<LineBreak />
                 4. Enter This Ip into text box<LineBreak />
-            </TextBlock>
-            <Label FontSize="20" Name="lblIP"/>
-            <TextBlock FontSize="16" Margin="1" TextTrimming="CharacterEllipsis" Foreground="Green">
-                5. Click "Select Colour and Connect"
+                </TextBlock>
+                <Label FontSize="20" Name="lblIP"/>
+                <TextBlock FontSize="16" Margin="1" TextTrimming="CharacterEllipsis" Foreground="Green">
+                5. Click "Select Colour and Connect"<LineBreak />
                 6. Pick A Colour<LineBreak />
                 7. Wait for next game to start
-            </TextBlock>
+                </TextBlock>
+            </StackPanel>
+        <Label x:Name="txtTitle" Width="800" Content="Game Starting" HorizontalContentAlignment="Center" FontSize="20"/>
+        <StackPanel x:Name="spHighScore" Width="400">
+            <TextBox x:Name="txtScores" Width="200" Height="492" TextWrapping="Wrap" Text="High Scores" HorizontalAlignment="Right" Canvas.Left="630" Canvas.Top="-5"/>
         </StackPanel>
-
-            <TextBox x:Name="textBox" Height="492" TextWrapping="Wrap" Text="dfgsdfgs sdfg sdfg sdfg sdfg ahjasdfhjadfhjsasdfhj asashjasahj" Width="120" Canvas.Top="10" HorizontalAlignment="Right"/>
 
     </local:MyCanvas>
 
