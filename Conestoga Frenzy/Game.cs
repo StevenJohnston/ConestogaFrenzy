@@ -16,7 +16,6 @@ namespace Conestoga_Frenzy
         Point CanvasSize;
         MyTimer drawTimer;
         MyTimer updateTimer;
-
         Thread socketRecive;
 
         public List<Player> players = new List<Player>();
@@ -35,10 +34,12 @@ namespace Conestoga_Frenzy
                 CanvasSize = new Point(game.ActualWidth, game.ActualHeight);
             }));
             socketRecive = new Thread(new ThreadStart(WorkThreadFunction));
+            socketRecive.SetApartmentState(ApartmentState.STA);
             socketRecive.Start();
             updateTimer = new MyTimer(1000 / 120, update, new object());
             drawTimer = new MyTimer(1000 / 60, draw, game);
             drawTimer.start();
+            Thread.Sleep(500);
             drawTimer.pause();
             updateTimer.start();
             updateTimer.pause();
@@ -68,6 +69,7 @@ namespace Conestoga_Frenzy
                 {
                     Thread.Sleep(100);
                 }
+                stage.Reset();
 
                 drawTimer.pause();
                 updateTimer.pause();
@@ -135,8 +137,7 @@ namespace Conestoga_Frenzy
             game.Dispatcher.Invoke((Action)(() =>
             {
                 //MyCanvas game = obj as MyCanvas;
-
-                game.Children.Clear();
+                //game.Children.Clear();
                 game.DrawStage(stage);
                 game.DrawPlayers(players);
 
@@ -151,7 +152,7 @@ namespace Conestoga_Frenzy
             {
                 count++;
                 double oposite = Math.Sin(angle * count) * (stage.maxSize / 2) * stage.SPAWN_DISTANCE_RATIO;
-                double adjacent = Math.Sin((Math.PI / 4 - angle) * count) * (stage.maxSize / 2) * stage.SPAWN_DISTANCE_RATIO;
+                double adjacent = Math.Cos(angle * count) * (stage.maxSize / 2) * stage.SPAWN_DISTANCE_RATIO;
                 player.position = new Point(CanvasSize.X / 2 + oposite, CanvasSize.Y / 2 + adjacent);
             }
             players.ForEach(x => x.isAlive = true);

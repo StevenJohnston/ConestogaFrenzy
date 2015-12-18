@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -27,15 +28,21 @@ namespace Conestoga_Frenzy
         public Point velocity;
         public Point acceleration;
         public Point speedOnX;
-        
+
+        int canvasItemIndex = -1;
+        Image thisElement;
+
         public bool isAlive;
         public Point afterCollisionVelocity;
         //public BitmapImage currentImage;
         public BitmapSource currentImage;
         public BitmapSource sprite;
-        public int spriteIndex;
+        public int spriteIndex = 0;
         int spriteFrames = 8;
-        
+
+        public bool killMe = false;
+        Stopwatch stopWatch = new Stopwatch();
+
         public Player(long newId, Color newColour)
         {
             id = newId;
@@ -51,17 +58,24 @@ namespace Conestoga_Frenzy
             position = new Point(100, 100);
             System.Drawing.Bitmap tempMap = Properties.Resources.ballSprite;
 
-
+            stopWatch.Start();
             //BitmapSource tempImage = new CroppedBitmap(sprite, new Int32Rect((int)(sprite.PixelWidth / spriteFrames) * spriteIndex, 0, (int)(sprite.PixelWidth / spriteFrames), (int)(sprite.PixelWidth / spriteFrames)));
             sprite = ExtBitmap.ToBitmapImage(ExtBitmap.ColorTint(tempMap, colour.B, colour.G, colour.R));
 
 
             //sprite = ToBitmapImage(tempMap);
             sprite.Freeze();
+
+            
             //sprite = new BitmapImage(new Uri("pack://application:,,,/Conestoga Frenzy;component/Resources/ballSprite.png", UriKind.Absolute));
         }
         public void move()
         {
+            if(stopWatch.ElapsedMilliseconds > 2000)
+            {
+                killMe = true;
+                isAlive = false;
+            }
             if (isAlive)
             {
                 Point changeInAcceleration = new Point(acceleration.X - velocity.X, acceleration.Y - velocity.Y);
@@ -133,6 +147,8 @@ namespace Conestoga_Frenzy
         }
         public void updateAcceleration(Point tilt)
         {
+            stopWatch.Reset();
+            stopWatch.Start();
             if (isAlive)
             {
                 acceleration.X = tilt.X * -1;
@@ -183,6 +199,8 @@ namespace Conestoga_Frenzy
                         spriteIndex = 0;
                     }
                     currentImage = new CroppedBitmap(sprite, new Int32Rect((int)(sprite.PixelWidth / spriteFrames) * spriteIndex, 0, (int)(sprite.PixelWidth / spriteFrames), (int)(sprite.PixelWidth / spriteFrames)));
+
+                    thisElement.Source = currentImage;
                     SpriteCounter = 0;
                 }
             }
@@ -192,15 +210,32 @@ namespace Conestoga_Frenzy
 
         public void Draw(MyCanvas myCanvas)
         {
-            nextSprite();
-            Image img = new Image();
-            img.Source = currentImage;
-            //img.Source = player.currentImage;
-            img.Width = size.X;
-            img.Height = size.Y;
-            Canvas.SetLeft(img, position.X-img.Width/2);
-            Canvas.SetTop(img, position.Y-img.Width/2);
-            myCanvas.Children.Add(img);
+            if (!killMe)
+            {
+                nextSprite();
+                if (canvasItemIndex == -1)
+                {
+                    this.thisElement = new Image();
+                    thisElement.Width = size.X;
+                    thisElement.Height = size.Y;
+                }
+                //img.Source = currentImage;
+                //img.Source = player.currentImage;
+                Canvas.SetLeft(thisElement, position.X - thisElement.Width / 2);
+                Canvas.SetTop(thisElement, position.Y - thisElement.Width / 2);
+                if (canvasItemIndex == -1)
+                {
+                    canvasItemIndex = myCanvas.Children.Add(thisElement);
+                }
+            }
+            else
+            {
+                if (canvasItemIndex != -1)
+                {
+                    myCanvas.Children.RemoveAt(canvasItemIndex);
+                    canvasItemIndex = -1;
+                }
+            }
         }
         static double Hypotenuse(double side1, double side2)
         {
@@ -214,5 +249,6 @@ namespace Conestoga_Frenzy
             }
             return returner;
         }
+
     }
 }

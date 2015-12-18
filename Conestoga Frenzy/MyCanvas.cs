@@ -18,7 +18,7 @@ namespace Conestoga_Frenzy
         private static Action EmptyDelegate = delegate () { };
         protected override void OnRender(DrawingContext dc)
         {
-
+            
             //BitmapImage img = new BitmapImage(new Uri("c:\\demo.jpg"));
             //dc.DrawImage(img, new Rect(0, 0, img.PixelWidth, img.PixelHeight));
         }
@@ -32,8 +32,7 @@ namespace Conestoga_Frenzy
         }
         public void DrawStage(Stage stage)
         {
-
-            Children.Clear();
+            
             stage.DrawStage(this);
             Dispatcher.Invoke(DispatcherPriority.Render, EmptyDelegate);
         }

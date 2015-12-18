@@ -23,25 +23,28 @@ namespace Conestoga_Frenzy
     /// </summary>
     public partial class MainWindow : Window
     {
-        Point CanvasSize;
-        MyTimer drawTimer;
-        MyTimer updateTimer;
-
-        Thread socketRecive; 
-
         public List<Player> players = new List<Player>();
         Stage stage = new Stage();
         public MainWindow()
         {
             InitializeComponent();
+            lblIP.Content = GetLocalIPAddress();
             Game theGame = new Game(game);
             Thread gameThread = new Thread(theGame.start);
-            gameThread.Start();
-
-            //this.Loaded += new RoutedEventHandler(Game);
-                
+            gameThread.SetApartmentState(ApartmentState.STA);
+            gameThread.Start();    
         }
-        
-        
+        public static string GetLocalIPAddress()
+        {
+            var host = Dns.GetHostEntry(Dns.GetHostName());
+            foreach (var ip in host.AddressList)
+            {
+                if (ip.AddressFamily == AddressFamily.InterNetwork)
+                {
+                    return ip.ToString();
+                }
+            }
+            throw new Exception("Local IP Address Not Found!");
+        }
     }
 }
