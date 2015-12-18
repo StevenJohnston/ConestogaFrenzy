@@ -1,4 +1,9 @@
-﻿using System;
+﻿//File: MainWindow.xaml.cs
+//Name: Steven Johnston, Matthew Warren
+//Date: 11/18/2015
+//Description: 
+//      Starting point of project. Initiates Game
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -21,10 +26,13 @@ namespace Conestoga_Frenzy
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
+    /// <seealso cref="System.Windows.Window" />
+    /// <seealso cref="System.Windows.Markup.IComponentConnector" />
     public partial class MainWindow : Window
     {
-        public List<Player> players = new List<Player>();
-        Stage stage = new Stage();
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MainWindow"/> class.
+        /// </summary>
         public MainWindow()
         {
             InitializeComponent();
@@ -35,6 +43,11 @@ namespace Conestoga_Frenzy
             gameThread.SetApartmentState(ApartmentState.STA);
             gameThread.Start();    
         }
+        /// <summary>
+        /// Gets the local ip address.
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="Exception">Local IP Address Not Found!</exception>
         public static string GetLocalIPAddress()
         {
             var host = Dns.GetHostEntry(Dns.GetHostName());

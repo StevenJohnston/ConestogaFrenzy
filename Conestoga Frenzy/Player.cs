@@ -1,4 +1,11 @@
-﻿using System;
+﻿//File: Player.cs
+//Name: Steven Johnston, Matthew Warren
+//Date: 11/18/2015
+//Description: 
+//      This class contains functionality for a player.
+//      A player is a successfull new connection to the game. 
+//      Player holds drawing and updating.
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -14,50 +21,140 @@ namespace Conestoga_Frenzy
 {
     public class Player
     {
+        /// <summary>
+        /// Players current Sprite
+        /// </summary>
         int SpriteCounter = 0;
+        /// <summary>
+        /// Speed of the sprite image change
+        /// </summary>
         const int SPRITE_SPEED = 12;
 
+        /// <summary>
+        /// The max_speed
+        /// </summary>
         const double MAX_SPEED = 0.8;
+        /// <summary>
+        /// This is acceleration
+        /// </summary>
         const double MAX_SPEED_CHANGE = 0.10;
+        /// <summary>
+        /// Not used will be used soon
+        /// </summary>
         const double MAX_SPEED_ON_X = 2;
+        /// <summary>
+        /// How fast to being to accelerate
+        /// </summary>
         const double SPEED_DIVISOR = 10;
+        /// <summary>
+        /// The weight of the player. high makes them bounce more
+        /// </summary>
         const double WEIGHT = 2;
+        /// <summary>
+        /// how long it takes to accelerate
+        /// </summary>
         const double SPEED_POWER = 9;
-        
+
+        /// <summary>
+        /// The size of the player ratio
+        /// </summary>
         const double SIZE_RATIO = 2;
 
+        /// <summary>
+        /// The identifier
+        /// </summary>
         public long id;
+        /// <summary>
+        /// The colour
+        /// </summary>
         public Color colour;
+        /// <summary>
+        /// The position on the screen
+        /// </summary>
         public Point position;
+        /// <summary>
+        /// The size of the player
+        /// </summary>
         public Point size;
+        /// <summary>
+        /// The velocity
+        /// </summary>
         public Point velocity;
+        /// <summary>
+        /// The acceleration
+        /// </summary>
         public Point acceleration;
+        /// <summary>
+        /// The speed on the x axis for equation
+        /// </summary>
         public Point speedOnX;
+        /// <summary>
+        /// The score
+        /// </summary>
         public int score =0;
 
+        /// <summary>
+        /// Index of image on canvas
+        /// </summary>
         int canvasItemIndex = -1;
+        /// <summary>
+        /// This image element on canvas
+        /// </summary>
         Image thisElement;
 
+        /// <summary>
+        /// Is this player alive
+        /// </summary>
         public bool isAlive;
+        /// <summary>
+        /// Player velocity after the collide with player(s)
+        /// </summary>
         public Point afterCollisionVelocity;
-        //public BitmapImage currentImage;
+        /// <summary>
+        /// The current image in sprite
+        /// </summary>
         public BitmapSource currentImage;
+        /// <summary>
+        /// The sprite
+        /// </summary>
         public BitmapSource sprite;
+        /// <summary>
+        /// Current postion in sprite
+        /// </summary>
         public int spriteIndex = 0;
+        /// <summary>
+        /// Number of sprite frames
+        /// </summary>
         int spriteFrames = 8;
 
+        /// <summary>
+        /// Set true if user has disconnected
+        /// </summary>
         public bool killMe = false;
+        /// <summary>
+        /// Stop watch for killing 
+        /// </summary>
         Stopwatch stopWatch = new Stopwatch();
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Player"/> class.
+        /// </summary>
+        /// <param name="newId">The new identifier.</param>
+        /// <param name="newColour">The new colour.</param>
         public Player(long newId, Color newColour)
         {
             id = newId;
             colour = newColour;
         }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Player"/> class.
+        /// </summary>
+        /// <param name="newId">The new identifier.</param>
+        /// <param name="newColour">The new colour.</param>
         public Player(long newId, string newColour)
         {
             id = newId;
-            colour = (Color)ColorConverter.ConvertFromString(newColour);
+            colour = (Color)ColorConverter.ConvertFromString(newColour);//String to colour
             size = new Point(100, 100);
             isAlive = false;
             velocity = new Point(0, 0);
@@ -65,16 +162,13 @@ namespace Conestoga_Frenzy
             System.Drawing.Bitmap tempMap = Properties.Resources.ballSprite;
 
             stopWatch.Start();
-            //BitmapSource tempImage = new CroppedBitmap(sprite, new Int32Rect((int)(sprite.PixelWidth / spriteFrames) * spriteIndex, 0, (int)(sprite.PixelWidth / spriteFrames), (int)(sprite.PixelWidth / spriteFrames)));
             sprite = ExtBitmap.ToBitmapImage(ExtBitmap.ColorTint(tempMap, colour.B, colour.G, colour.R));
-
-
-            //sprite = ToBitmapImage(tempMap);
-            sprite.Freeze();
-
             
-            //sprite = new BitmapImage(new Uri("pack://application:,,,/Conestoga Frenzy;component/Resources/ballSprite.png", UriKind.Absolute));
+            sprite.Freeze();
         }
+        /// <summary>
+        /// Moves this instance. Increase the players postion by its velocity
+        /// </summary>
         public void move()
         {
             if(stopWatch.ElapsedMilliseconds > 2000)
@@ -84,6 +178,7 @@ namespace Conestoga_Frenzy
             }
             if (isAlive)
             {
+                //used to prevent accelerating to fast
                 Point changeInAcceleration = new Point(acceleration.X - velocity.X, acceleration.Y - velocity.Y);
 
 
@@ -103,9 +198,11 @@ namespace Conestoga_Frenzy
                 {
                     changeInAcceleration.Y = -MAX_SPEED_CHANGE;
                 }
+                //Change speed
                 speedOnX.X += changeInAcceleration.X;
                 speedOnX.Y += changeInAcceleration.Y;
 
+                //keep speed in range
                 if (speedOnX.X > MAX_SPEED)
                 {
                     speedOnX.X = MAX_SPEED;
@@ -123,6 +220,7 @@ namespace Conestoga_Frenzy
                     speedOnX.Y = MAX_SPEED * -1;
                 }
 
+                //update velocity
                 velocity.X += Math.Pow(speedOnX.X, SPEED_POWER) / SPEED_DIVISOR;
                 velocity.Y += Math.Pow(speedOnX.Y, SPEED_POWER) / SPEED_DIVISOR;
 
@@ -133,6 +231,10 @@ namespace Conestoga_Frenzy
                 position.Y += velocity.Y;//Math.Pow(velocity.Y,1) * polarity;
             }
         }
+        /// <summary>
+        /// Checks if player collides with any other player
+        /// </summary>
+        /// <param name="players">The players.</param>
         public void collision(List<Player> players)
         {
 
@@ -143,14 +245,17 @@ namespace Conestoga_Frenzy
                 {
                     if (collides(player))
                     {
+                        //Velocity when hit
                         afterCollisionVelocity.X += (player.velocity.X * Math.Abs(player.acceleration.X / 2))- (plusOrMinus(afterCollisionVelocity.X) * WEIGHT);
                         afterCollisionVelocity.Y += (player.velocity.Y * Math.Abs(player.acceleration.Y / 2)) - (plusOrMinus(afterCollisionVelocity.Y) * WEIGHT);
                     }
                 }
             }
-            //Set volocity according to all collisions
-            //hint: dont colide with self
         }
+        /// <summary>
+        /// Updates the acceleration based of tilt from phone.
+        /// </summary>
+        /// <param name="tilt">The tilt.</param>
         public void updateAcceleration(Point tilt)
         {
             stopWatch.Reset();
@@ -161,10 +266,18 @@ namespace Conestoga_Frenzy
                 acceleration.Y = tilt.Y;
             }
         }
+        /// <summary>
+        /// Updates the velocity to after collion velocity.
+        /// </summary>
         public void updateVelocity()
         {
             velocity = afterCollisionVelocity;
         }
+        /// <summary>
+        /// Checks if collision with another player.
+        /// </summary>
+        /// <param name="player">The player.</param>
+        /// <returns></returns>
         public bool collides(Player player)
         {
             bool doesCollide = false;
@@ -175,7 +288,12 @@ namespace Conestoga_Frenzy
             }
             return doesCollide;
         }
-        
+
+        /// <summary>
+        /// Checks if player has fallen of the stage
+        /// </summary>
+        /// <param name="myCanvas">My canvas.</param>
+        /// <param name="stage">The stage.</param>
         public void OnPlat(MyCanvas myCanvas, Stage stage)
         {
             if (isAlive)
@@ -183,6 +301,7 @@ namespace Conestoga_Frenzy
                 Point centerOfScreen = new Point(myCanvas.ActualWidth / 2, myCanvas.ActualHeight / 2);
                 double DistanceFromCenter = Hypotenuse(centerOfScreen.X - position.X, centerOfScreen.Y - position.Y);
 
+                //Checks if fell off stage
                 if (DistanceFromCenter > stage.maxFromCenter + size.X / 4)
                 {
                     isAlive = false;
@@ -194,7 +313,10 @@ namespace Conestoga_Frenzy
             }
         }
 
-        
+
+        /// <summary>
+        /// changes image to next sprite
+        /// </summary>
         public void nextSprite()
         {
             if (isAlive)
@@ -217,6 +339,10 @@ namespace Conestoga_Frenzy
         }
 
 
+        /// <summary>
+        /// Draws the specified canvas.
+        /// </summary>
+        /// <param name="myCanvas">My canvas.</param>
         public void Draw(MyCanvas myCanvas)
         {
             if (!killMe)
@@ -246,10 +372,21 @@ namespace Conestoga_Frenzy
                 }
             }
         }
+        /// <summary>
+        /// Get hypotenuse from 2 sides.
+        /// </summary>
+        /// <param name="side1">The side1.</param>
+        /// <param name="side2">The side2.</param>
+        /// <returns></returns>
         static double Hypotenuse(double side1, double side2)
         {
             return Math.Sqrt(side1 * side1 + side2 * side2);
         }
+        /// <summary>
+        /// Pluses the or minus.
+        /// </summary>
+        /// <param name="num">The number.</param>
+        /// <returns></returns>
         int plusOrMinus(double num)
         { 
             int returner = 1;

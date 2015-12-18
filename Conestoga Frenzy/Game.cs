@@ -1,4 +1,9 @@
-﻿using System;
+﻿//File: Game.cs
+//Name: Steven Johnston, Matthew Warren
+//Date: 11/18/2015
+//Description: 
+//      The game class that handles the game flow. Handles game thread (update/draw)
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -11,29 +16,72 @@ using System.Windows.Threading;
 
 namespace Conestoga_Frenzy
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class Game
     {
+        /// <summary>
+        /// The lock for players list
+        /// </summary>
         object _playersLock = new object();
+        /// <summary>
+        /// The canvas size
+        /// </summary>
         Point CanvasSize;
+        /// <summary>
+        /// The draw timer
+        /// </summary>
         MyTimer drawTimer;
+        /// <summary>
+        /// The update timer
+        /// </summary>
         MyTimer updateTimer;
+        /// <summary>
+        /// The socket recive thread
+        /// </summary>
         Thread socketRecive;
 
+        /// <summary>
+        /// The title text
+        /// </summary>
         string titleText = "Game Starting";
 
+        /// <summary>
+        /// The high scores
+        /// </summary>
         HighScore highScores;
 
+        /// <summary>
+        /// The players
+        /// </summary>
         public List<Player> players = new List<Player>();
+        /// <summary>
+        /// The stage
+        /// </summary>
         Stage stage = new Stage();
 
+        /// <summary>
+        /// The game canvas
+        /// </summary>
         MyCanvas game;
+        /// <summary>
+        /// The window 
+        /// </summary>
         MainWindow window;
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Game"/> class.
+        /// </summary>
+        /// <param name="myWindow">My window.</param>
         public Game(MainWindow myWindow)
         {
 
             game = myWindow.game;
             window = myWindow;
         }
+        /// <summary>
+        /// Starts the game
+        /// </summary>
         public void start()
         {
 
@@ -41,8 +89,9 @@ namespace Conestoga_Frenzy
             {
                 CanvasSize = new Point(game.ActualWidth, game.ActualHeight);
             }));
+
             highScores = new HighScore(window.txtScores);
-            socketRecive = new Thread(new ThreadStart(WorkThreadFunction));
+            socketRecive = new Thread(new ThreadStart(udpRevice));
             socketRecive.SetApartmentState(ApartmentState.STA);
             socketRecive.Start();
             updateTimer = new MyTimer(1000 / 120, update, new object());
@@ -93,7 +142,7 @@ namespace Conestoga_Frenzy
                         winner.score++;
                         highScores.updatePlayer(winner);
                     }
-                    else {
+                    else if(players.Count >1){
                         titleText = "Tie Game";
                     }
                 }));
@@ -104,7 +153,10 @@ namespace Conestoga_Frenzy
                 updateTimer.pause();
             }
         }
-        public void WorkThreadFunction()
+        /// <summary>
+        /// Recives udp packets
+        /// </summary>
+        public void udpRevice()
         {
 
             IPEndPoint ipep = new IPEndPoint(IPAddress.Any, 27940);
@@ -151,6 +203,10 @@ namespace Conestoga_Frenzy
                 }
             }
         }
+        /// <summary>
+        /// Updates game
+        /// </summary>
+        /// <param name="obj">The object.</param>
         public void update(object obj)
         {
             game.Dispatcher.Invoke((Action)(() =>
@@ -179,6 +235,10 @@ namespace Conestoga_Frenzy
             stage.Update();
 
         }
+        /// <summary>
+        /// Draws the specified object.
+        /// </summary>
+        /// <param name="obj">The object.</param>
         public void draw(object obj)
         {
             game.Dispatcher.Invoke((Action)(() =>
@@ -191,6 +251,9 @@ namespace Conestoga_Frenzy
             }));
         }
 
+        /// <summary>
+        /// Starts the game.
+        /// </summary>
         public void StartGame()
         {
             lock(_playersLock)
